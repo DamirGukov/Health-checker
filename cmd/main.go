@@ -24,7 +24,7 @@ func main() {
 	e.GET("/healthcheck", h.HealthCheck)
 	e.GET("/questions", h.GetQuestions)
 	e.POST("/submit", h.SubmitAnswers)
-	e.Static("/", "static") // Serve static files from the 'static' directory
+	e.Static("/", "static")
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

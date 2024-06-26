@@ -13,8 +13,8 @@ body {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    width: 400px; /* Фиксированная ширина */
-    height: 600px; /* Фиксированная высота */
+    width: 400px;
+    height: 600px;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -38,8 +38,8 @@ h1.custom-header {
 }
 
 .content-container {
-    padding: 100px 20px 20px 20px; /* Больше отступ сверху */
-    height: calc(100% - 40px); /* Учитываем высоту шапки */
+    padding: 100px 20px 20px 20px;
+    height: calc(100% - 40px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -55,12 +55,12 @@ h1.custom-header {
 
 #question {
     font-size: 18px;
-    background-color: #e7f3fe; /* Добавлен фон */
-    border: 1px solid #b3d4fc; /* Цвет окантовки */
+    background-color: #e7f3fe;
+    border: 1px solid #b3d4fc;
     padding: 10px;
     border-radius: 5px;
-    margin: 0 20px; /* Отступы слева и справа */
-    box-sizing: border-box; /* Учитываем отступы в размере */
+    margin: 0 20px;
+    box-sizing: border-box;
 }
 
 form {

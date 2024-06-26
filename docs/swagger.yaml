@@ -1,0 +1,85 @@
+basePath: /
+definitions:
+  models.Question:
+    properties:
+      id:
+        type: integer
+      questionText:
+        type: string
+    type: object
+  models.UserAnswers:
+    properties:
+      answers:
+        additionalProperties:
+          type: boolean
+        type: object
+    required:
+    - answers
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Це API для проекту Health Checker.
+  termsOfService: http://swagger.io/terms/
+  title: Health Checker API
+  version: "1.0"
+paths:
+  /healthcheck:
+    get:
+      consumes:
+      - application/json
+      description: Повертає статус "OK" якщо сервер працює
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Перевірка здоров'я сервера
+      tags:
+      - health
+  /questions:
+    get:
+      consumes:
+      - application/json
+      description: Повертає список всіх питань
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Question'
+            type: array
+      summary: Отримати всі питання
+      tags:
+      - questions
+  /submit:
+    post:
+      consumes:
+      - application/json
+      description: Приймає відповіді користувача та повертає діагноз
+      parameters:
+      - description: Відповіді користувача
+        in: body
+        name: answers
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserAnswers'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Надіслати відповіді користувача
+      tags:
+      - answers
+swagger: "2.0"

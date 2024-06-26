@@ -8,12 +8,22 @@
 </head>
 <body>
 <div class="container">
-    <h1>Health Check</h1>
-    <form id="healthForm">
-        <div id="questions"></div>
-        <button type="submit">Submit</button>
-    </form>
-    <div id="result"></div>
+    <div class="header-container">
+        <h1 class="custom-header">Health Check</h1>
+    </div>
+    <div class="content-container">
+        <div id="questionContainer">
+            <form id="questionForm">
+                <div id="question"></div>
+                <div class="button-container">
+                    <button type="button" class="btn btn-yes" id="yesButton">Так</button>
+                    <button type="button" class="btn btn-no" id="noButton">Ні</button>
+                </div>
+            </form>
+            <div id="questionCounter"></div>
+        </div>
+        <div id="result"></div>
+    </div>
 </div>
 <script src="script.js"></script>
 </body>

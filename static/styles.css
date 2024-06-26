@@ -11,40 +11,107 @@ body {
 
 .container {
     background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 400px; /* Фиксированная ширина */
+    height: 600px; /* Фиксированная высота */
+    text-align: center;
+    position: relative;
+    overflow: hidden;
 }
 
-h1 {
-    margin-bottom: 20px;
+.header-container {
+    width: 100%;
+    background-color: #0044cc;
+    padding: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+}
+
+h1.custom-header {
+    margin: 0;
+    font-size: 24px;
+    color: white;
+}
+
+.content-container {
+    padding: 100px 20px 20px 20px; /* Больше отступ сверху */
+    height: calc(100% - 40px); /* Учитываем высоту шапки */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+#questionCounter {
+    text-align: center;
+    margin-top: 20px;
+    color: gray;
+    font-size: 14px;
+}
+
+#question {
+    font-size: 18px;
+    background-color: #e7f3fe; /* Добавлен фон */
+    border: 1px solid #b3d4fc; /* Цвет окантовки */
+    padding: 10px;
+    border-radius: 5px;
+    margin: 0 20px; /* Отступы слева и справа */
+    box-sizing: border-box; /* Учитываем отступы в размере */
 }
 
 form {
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+    box-sizing: border-box;
 }
 
 button {
-    margin-top: 20px;
-    padding: 10px;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: #4CAF50;
     color: white;
     cursor: pointer;
+    width: 45%;
+    font-size: 16px;
 }
 
 button:hover {
-    background-color: #45a049;
+    opacity: 0.8;
+}
+
+.btn-yes {
+    background-color: #b3d4fc;
+}
+
+.btn-no {
+    background-color: #9ac4f8;
 }
 
 #result {
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 5px;
+    margin-top: 30px;
+    padding: 15px;
+    border-radius: 10px;
     background-color: #e7f3fe;
     border: 1px solid #b3d4fc;
     color: #31708f;
     display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#result.show {
+    display: block;
+    opacity: 1;
 }

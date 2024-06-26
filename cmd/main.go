@@ -6,10 +6,19 @@ import (
 	"github.com/labstack/echo/v4"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"healthchecker-app/handlers"
 	"os"
+
+	_ "healthchecker-app/docs"
 )
 
+// @title Health Checker API
+// @version 1.0
+// @description Це API для проекту Health Checker.
+// @termsOfService http://swagger.io/terms/
+// @host localhost:8080
+// @BasePath /
 func main() {
 	e := echo.New()
 	logrus.SetFormatter(&logrus.JSONFormatter{})
@@ -25,6 +34,7 @@ func main() {
 	e.GET("/questions", h.GetQuestions)
 	e.POST("/submit", h.SubmitAnswers)
 	e.Static("/", "static")
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

@@ -1,84 +1,81 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const questionsDiv = document.getElementById("questions");
-    const resultDiv = document.getElementById("result");
+    let currentQuestionIndex = 0;
+    let answers = {};
+    let questions = [];
 
-    function showError(message) {
-        resultDiv.innerText = `Error: ${message}`;
-        resultDiv.style.display = "block";
-        resultDiv.style.color = "red";
+    const questionElement = document.getElementById("question");
+    const questionCounterElement = document.getElementById("questionCounter");
+    const resultElement = document.getElementById("result");
+
+    function showQuestion(index) {
+        if (questions.length > 0) {
+            questionElement.innerText = questions[index].QuestionText;
+            questionCounterElement.innerText = `Питання ${index + 1} з ${questions.length}`;
+        } else {
+            console.error("No questions available to show.");
+        }
     }
 
-    function loadQuestions() {
-        fetch("http://localhost:8080/questions")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Questions data:", data); // Логування отриманих даних
-                questionsDiv.innerHTML = "";
-                data.forEach(question => {
-                    console.log("Processing question:", question); // Логування кожного питання
-                    const div = document.createElement("div");
-                    div.classList.add("question");
-                    div.innerHTML = `
-                        <label>
-                            <input type="checkbox" name="question${question.ID}" value="${question.ID}">
-                            ${question.QuestionText}
-                        </label>
-                    `;
-                    questionsDiv.appendChild(div);
-                });
-            })
-            .catch(error => {
-                console.error("Error fetching questions:", error);
-                showError("Could not load questions. Please try again later.");
-            });
+    function showResult(diagnosis) {
+        questionElement.style.display = "none";
+        document.querySelector(".button-container").style.display = "none";
+        questionCounterElement.style.display = "none";
+        resultElement.innerText = `Diagnosis: ${diagnosis}`;
+        resultElement.classList.add("show");
     }
 
-    function submitForm(event) {
-        event.preventDefault();
+    document.getElementById("yesButton").addEventListener("click", function() {
+        answers[questions[currentQuestionIndex].ID] = true;
+        nextQuestion();
+    });
 
-        const answers = {};
-        const formData = new FormData(form);
-        formData.forEach((value, key) => {
-            console.log(`Processing: key=${key}, value=${value}`);
-            const questionId = key.replace('question', '');
-            answers[questionId] = form[key].checked;
-        });
+    document.getElementById("noButton").addEventListener("click", function() {
+        answers[questions[currentQuestionIndex].ID] = false;
+        nextQuestion();
+    });
 
-        console.log("Submitting answers:", answers);
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            showQuestion(currentQuestionIndex);
+        } else {
+            submitAnswers();
+        }
+    }
 
+    function submitAnswers() {
         fetch("http://localhost:8080/submit", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ answers })
+            body: JSON.stringify({ answers: answers })
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log("Diagnosis data:", data);
-                resultDiv.innerText = `Diagnosis: ${data.diagnosis}`;
-                resultDiv.style.display = "block";
-                resultDiv.style.color = "black";
+                if (data.error) {
+                    console.error("Diagnosis error:", data.error);
+                } else {
+                    console.log("Diagnosis data:", data);
+                    showResult(data.diagnosis);
+                }
             })
             .catch(error => {
                 console.error("Error submitting answers:", error);
-                showError("Could not submit answers. Please try again later.");
             });
     }
 
-    const form = document.getElementById("healthForm");
-    form.addEventListener("submit", submitForm);
-
-    // Load questions on page load
-    loadQuestions();
+    fetch("http://localhost:8080/questions")
+        .then(response => response.json())
+        .then(data => {
+            questions = data;
+            if (questions.length > 0) {
+                showQuestion(currentQuestionIndex);
+            } else {
+                console.error("No questions received from the server.");
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching questions:", error);
+        });
 });
